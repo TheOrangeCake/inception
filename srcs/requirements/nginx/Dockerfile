@@ -5,12 +5,22 @@ FROM alpine:3.21
 
 WORKDIR /nginx
 
-# install dependencies
+# install nginx
 RUN apk update && apk add nginx
+RUN apk add curl
 
-# # copy conf files
-COPY test.html /usr/share/nginx/html/test.html
+# install openssl for TLS security certificate and generate certificate
+RUN apk add openssl
+RUN mkdir -p /etc/nginx/ssl
+RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=CH/L=Geneva/O=42/CN=hoannguy.42.fr/UID=hoannguy" 
 
-# EXPOSE 443
+# copy nginx config file
+COPY /conf/nginx.conf /etc/nginx/nginx.conf
+COPY index.html /etc/nginx
 
+# change permission and owner for wordpress root
+# RUN chmod 755 /var/www/html
+# RUN chown -R www-data:www-data /var/www/html
+
+# run nginx
 CMD ["nginx", "-g", "daemon off;"]

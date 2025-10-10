@@ -1,0 +1,3 @@
+To mount shared folder "inception" in Ubuntu
+-> create the folder Inception in Desktop
+-> sudo mount -t vboxsf inception /home/hoannguy/Desktop/Inception
