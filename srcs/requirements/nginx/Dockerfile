@@ -3,11 +3,10 @@
 # the base image for linux alpine.
 FROM alpine:3.21
 
-WORKDIR /nginx
-
 # install nginx
 RUN apk update && apk add nginx
 RUN apk add curl
+RUN mkdir inception
 
 # install openssl for TLS security certificate and generate certificate
 RUN apk add openssl
@@ -16,8 +15,9 @@ RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/ngin
 
 # copy nginx config file
 COPY /conf/nginx.conf /etc/nginx/nginx.conf
-COPY index.html /etc/nginx
+COPY index.html /inception
 
+EXPOSE 443
 # change permission and owner for wordpress root
 # RUN chmod 755 /var/www/html
 # RUN chown -R www-data:www-data /var/www/html
