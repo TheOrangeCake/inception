@@ -38,16 +38,16 @@ down:
 
 clean: down
 	@docker system prune -a -f
-	@rm -rf $(WORDPRESS_DATABASE)/*
-	@rm -rf $(MARIADB_DATABASE)/*
+	@sudo rm -rf $(WORDPRESS_DATABASE)/*
+	@sudo rm -rf $(MARIADB_DATABASE)/*
 	@echo "All containers, networks and images removed"
 
 fclean: down
 	@docker system prune -a -f --volumes
-	@rm -rf $(WORDPRESS_DATABASE)/*
-	@rm -rf $(MARIADB_DATABASE)/*
+	@rm -rf $(WORDPRESS_DATABASE)/* $(WORDPRESS_DATABASE)/.* 2>/dev/null || true
+	@rm -rf $(MARIADB_DATABASE)/* $(MARIADB_DATABASE)/.* 2>/dev/null || true
 	@echo "All containers, images, networks and volumes removed"
-	@echo "Database folders deleted"
+	@echo "Database folders cleared"
 
 re: fclean dir build up
 
