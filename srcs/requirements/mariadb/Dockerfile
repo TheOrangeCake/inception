@@ -9,7 +9,6 @@ ENTRYPOINT ["ash", "/tmp/mariadb.sh"]
 
 EXPOSE 3306
 
-# run mariadb
 CMD ["mariadbd-safe"]
 
 # Flow:

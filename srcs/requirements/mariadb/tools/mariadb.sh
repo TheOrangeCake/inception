@@ -23,19 +23,19 @@ if [ ! -e /var/lib/mysql/.setup ]; then
 	mariadbd-safe --skip-networking=0 --bind-address=127.0.0.1 >/dev/null 2>&1 &
 
 	# wait till finish startup
-	until mysqladmin ping -u root --silent >/dev/null 2>&1; do
+	until mariadb-admin ping -u root --silent >/dev/null 2>&1; do
 		sleep 1
 	done
 
 	mariadb --protocol=socket -u root <<-DONE
-		CREATE DATABASE IF NOT EXISTS \`${MYSQL_DATABASE}\`;
-		CREATE USER IF NOT EXISTS '${MYSQL_USER}'@'%' IDENTIFIED BY '${MYSQL_PASSWORD}';
-		GRANT ALL PRIVILEGES ON \`${MYSQL_DATABASE}\`.* TO '${MYSQL_USER}'@'%';
-		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MYSQL_ROOT_PASSWORD}';
+		CREATE DATABASE IF NOT EXISTS \`${MARIADB_DATABASE}\`;
+		CREATE USER IF NOT EXISTS '${MARIADB_USER}'@'%' IDENTIFIED BY '${MARIADB_PASSWORD}';
+		GRANT ALL PRIVILEGES ON \`${MARIADB_DATABASE}\`.* TO '${MARIADB_USER}'@'%';
+		ALTER USER 'root'@'localhost' IDENTIFIED BY '${MARIADB_ROOT_PASSWORD}';
 		FLUSH PRIVILEGES;
 		DONE
 
-		mariadb-admin -u root -p"${MYSQL_ROOT_PASSWORD}" shutdown
+		mariadb-admin -u root -p"${MARIADB_ROOT_PASSWORD}" shutdown
 
 		touch /var/lib/mysql/.setup
 fi
